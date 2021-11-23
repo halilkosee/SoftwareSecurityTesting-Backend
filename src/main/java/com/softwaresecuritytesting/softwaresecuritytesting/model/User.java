@@ -1,31 +1,28 @@
 package com.softwaresecuritytesting.softwaresecuritytesting.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
+import java.util.Set;
 
 @Entity
-@Table(name = "users")
+@Table(name = "user")
 public class User {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 45)
-    private String email;
+    private String name;
 
-    @Column(nullable = false, length = 64)
+    private String surname;
+
+    private String username;
+
     private String password;
 
-    @Column(name = "first_name", nullable = false, length = 20)
-    private String firstName;
+    @Transient
+    private String passwordConfirm;
 
-    @Column(name = "last_name", nullable = false, length = 20)
-    private String lastName;
+    @ManyToMany
+    private Set<Role> roles;
 
     public Long getId() {
         return id;
@@ -35,12 +32,28 @@ public class User {
         this.id = id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getName() {
+        return name;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getSurname() {
+        return surname;
+    }
+
+    public void setSurname(String surname) {
+        this.surname = surname;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public String getPassword() {
@@ -51,22 +64,19 @@ public class User {
         this.password = password;
     }
 
-    public String getFirstName() {
-        return firstName;
+    public String getPasswordConfirm() {
+        return passwordConfirm;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setPasswordConfirm(String passwordConfirm) {
+        this.passwordConfirm = passwordConfirm;
     }
 
-    public String getLastName() {
-        return lastName;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setLastName(String lastName) {
-        this.lastName = lastName;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
-
-
-
 }

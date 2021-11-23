@@ -1,4 +1,4 @@
-package com.softwaresecuritytesting.softwaresecuritytesting.service;
+package com.softwaresecuritytesting.softwaresecuritytesting.service.Impl;
 
 import java.io.IOException;
 import java.net.MalformedURLException;

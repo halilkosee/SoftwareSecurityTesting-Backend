@@ -7,12 +7,41 @@
 <body>
 
 <section class="my-5">
+    <div class="container text-center">
+        <div>
+            <h1>List of Files</h1>
+        </div>
+
+        <div>
+            <table class="table table-striped table-bordered">
+                <thead class="thead-light">
+                <tr>
+                    <th>Uploaded Files</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="fileInfo: ${listFiles}">
+                    <td class="text-info" th:text="${fileInfo.name}">File Name</td>
+                    <td>
+                            <form method="post" th:action="@{/file/analyse}" enctype="multipart/form-data">
+                                <button type="button" class="btn-success">Analyse</button>
+                            </form>
+                            <form method="post" th:action="@{/file/delete}" enctype="multipart/form-data">
+                                <button type="button" class="btn-danger">Delete </button>
+                            </form>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
     <div class="container">
         <div class="row">
             <div class="col-md-8 mx-auto">
                 <h2>Upload File Example</h2>
                 <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
-                <form method="post" th:action="@{/upload}" enctype="multipart/form-data">
+                <form method="post" th:action="@{/file/upload}" enctype="multipart/form-data">
                     <div class="form-group">
                         <input type="file" name="file" class="form-control-file">
                     </div>
@@ -22,6 +51,7 @@
         </div>
     </div>
 </section>
+<p th:text="${output}" th:if="${output ne null}" class="table-info"></p>
 
 </body>
 </html>

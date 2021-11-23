@@ -1,59 +1,70 @@
 package com.softwaresecuritytesting.softwaresecuritytesting.controller;
 
 import com.softwaresecuritytesting.softwaresecuritytesting.model.User;
-import com.softwaresecuritytesting.softwaresecuritytesting.repository.UserRepository;
+import com.softwaresecuritytesting.softwaresecuritytesting.service.SecurityService;
+import com.softwaresecuritytesting.softwaresecuritytesting.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-
-import java.util.List;
 
 @Controller
-@RequestMapping(value = "/user")
 public class UserController {
     @Autowired
-    private UserRepository userRepo;
+    private UserService userService;
 
-    // Login form
-    @RequestMapping("/login")
-    public String login() {
-        return "login.html";
+    @Autowired
+    private SecurityService securityService;
+
+    @Autowired
+    private UserValidator userValidator;
+
+    @GetMapping("/registration")
+    public String registration(Model model) {
+        if (securityService.isAuthenticated()) {
+            return "redirect:/";
+        }
+
+        model.addAttribute("userForm", new User());
+
+        return "registration";
     }
 
-    // Login form with error
-    @RequestMapping("/login-error")
-    public String loginError(Model model) {
-        model.addAttribute("loginError", true);
-        return "login.html";
+    @PostMapping("/registration")
+    public String registration(@ModelAttribute("userForm") User userForm, BindingResult bindingResult) {
+        userValidator.validate(userForm, bindingResult);
+
+        if (bindingResult.hasErrors()) {
+            return "registration";
+        }
+
+        userService.save(userForm);
+
+        securityService.autoLogin(userForm.getUsername(), userForm.getPasswordConfirm());
+
+        return "redirect:/welcome";
     }
 
-    @GetMapping("/register")
-    public String showRegistrationForm(Model model) {
-        model.addAttribute("user", new User());
+    @GetMapping("/login")
+    public String login(Model model, String error, String logout) {
+        if (securityService.isAuthenticated()) {
+            return "redirect:/";
+        }
 
-        return "signup_form";
+        if (error != null)
+            model.addAttribute("error", "Your username and password is invalid.");
+
+        if (logout != null)
+            model.addAttribute("message", "You have been logged out successfully.");
+
+        return "login";
     }
 
-    @PostMapping("/process_register")
-    public String processRegister(User user) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-
-        userRepo.save(user);
-
-        return "register_success";
-    }
-
-    @GetMapping("/users")
-    public String listUsers(Model model) {
-        List<User> listUsers = userRepo.findAll();
-        model.addAttribute("listUsers", listUsers);
-
-        return "users";
+    @GetMapping({"/", "/welcome"})
+    public String welcome(Model model) {
+        return "welcome";
     }
 }
