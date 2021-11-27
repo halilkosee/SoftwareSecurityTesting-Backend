@@ -35,13 +35,13 @@
                                 <td class="text-info" th:text="${fileInfo.name}">File Name</td>
                                 <td>
                                     <form method="post" th:action="@{/file/analyse}" enctype="multipart/form-data">
-                                        <button style="background-color: blue" type="submit" th:text="${fileInfo.name}" class="action_btn">Analyse File</button>
+                                        <button style="background-color: blue" type="submit" class="action_btn">Analyse File</button>
                                     </form>
                                     <span>
                                         ----------
                                     </span>
-                                    <form method="post" th:text="${fileInfo.name}" th:action="@{/file/delete}" enctype="multipart/form-data">
-                                        <button style="background-color: firebrick" type="submit" class="action_btn">Delete File </button>
+                                    <form method="post" th:action="@{/file/delete}" enctype="multipart/form-data">
+                                        <button style="background-color: red" type="submit" class="action_btn">Delete File</button>
                                     </form>
                                 </td>
                             </tr>
@@ -52,7 +52,6 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-md-8 mx-auto">
-                            <h2>Upload File Example</h2>
                             <p th:text="${message}" th:if="${message ne null}" class="alert alert-primary"></p>
                             <form method="post" th:action="@{/file/upload}" enctype="multipart/form-data">
                                 <div class="form-group">

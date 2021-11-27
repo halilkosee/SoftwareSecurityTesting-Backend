@@ -35,7 +35,7 @@ public class FileController {
             return new FileInfo(filename, url);
         }).collect(Collectors.toList());
         model.addAttribute("listFiles", fileInfos);
-        return "fileUpload";
+        return "welcome";
     }
 
 
@@ -56,13 +56,13 @@ public class FileController {
     }
 
     @PostMapping("/analyse")
-    public String fileAnalyse(@RequestParam("fileName")String fileName, RedirectAttributes attributes) {
-        System.out.println(fileName);
+    public String fileAnalyse() {
+        System.out.println("geldiii");
         return "redirect:/file";
     }
     @PostMapping("/delete")
-    public String delete(@RequestParam("fileName")String fileName, RedirectAttributes attributes) {
-        System.out.println(fileName);
+    public String delete() {
+        storageService.deleteByName("deletedfilename");
         return "redirect:/file";
     }
 
